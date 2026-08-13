@@ -3,14 +3,10 @@ import pandas as pd
 import plotly.express as px
 
 st.set_page_config(
-    page_title="Atlantic Recording Corporation — South Korea Analytics",
+    page_title="KPop-Comeback-Momentum-Analysis",
     page_icon="◈",
     layout="wide"
 )
-
-# ------------------------------------------------------------------
-# VISUAL SYSTEM — brushed-chrome-on-black, record-label plate aesthetic
-# ------------------------------------------------------------------
 
 VOID = "#0A0A0B"
 PANEL = "#141518"
@@ -209,12 +205,7 @@ def section(tag: str):
 
 def divider():
     st.markdown("<hr class='chrome-divider' />", unsafe_allow_html=True)
-
-
-# ------------------------------------------------------------------
-# DATA
-# ------------------------------------------------------------------
-
+    
 chart_history = pd.read_csv("data/chart_history.csv", parse_dates=["date"])
 reentry_events = pd.read_csv("data/reentry_events.csv", parse_dates=["reentry_date", "exit_date"])
 momentum = pd.read_csv(
@@ -223,31 +214,21 @@ momentum = pd.read_csv(
 )
 momentum["album_type"] = momentum["album_type"].str.title()
 
-# ------------------------------------------------------------------
-# HERO
-# ------------------------------------------------------------------
-
 st.markdown(
     """
     <div class="plate-header">
         <p class="plate-eyebrow">Atlantic Recording Corporation · South Korea Top 50</p>
-        <p class="plate-title">Comeback &amp; Fandom Intelligence</p>
+        <p class="plate-title">K-POP Comeback Momentum Anaylsis</p>
         <p class="plate-subtitle">Chart re-entry detection, momentum spikes, and fandom-intensity signal — built on daily playlist telemetry.</p>
     </div>
     """,
     unsafe_allow_html=True
 )
 
-# ------------------------------------------------------------------
-# SIDEBAR — FILTERS
-# ------------------------------------------------------------------
-
 st.sidebar.markdown("## Filters")
 
 start_date = chart_history["date"].min()
-end_date = chart_history["date"].max()
-
-# UPDATED: Added format="DD/MM/YYYY" 
+end_date = chart_history["date"].max() 
 selected_dates = st.sidebar.date_input(
     "Date range",
     value=(start_date, end_date),
@@ -287,10 +268,6 @@ if album_filter != "All":
 filtered = filtered[filtered["reentry_frequency"] >= reentry_count_filter]
 filtered = filtered[filtered["days_outside"] >= days_outside_filter]
 
-# ------------------------------------------------------------------
-# KPIs
-# ------------------------------------------------------------------
-
 section("Key Performance Indicators")
 
 col1, col2, col3, col4 = st.columns(4)
@@ -325,20 +302,12 @@ col8.metric(
 
 divider()
 
-# ------------------------------------------------------------------
-# REENTRY TIMELINE
-# ------------------------------------------------------------------
-
 section("Re-Entry Timeline")
 
 timeline = filtered.groupby("reentry_date").size().reset_index(name="count")
 fig = px.line(timeline, x="reentry_date", y="count", markers=True)
 fig.update_traces(line_color=GOLD, marker=dict(color=CHROME_HI, size=6))
 st.plotly_chart(styled(fig), use_container_width=True)
-
-# ------------------------------------------------------------------
-# MOMENTUM SPIKE
-# ------------------------------------------------------------------
 
 section("Momentum Spike Detection")
 
@@ -349,10 +318,6 @@ fig = px.bar(
 )
 fig.update_xaxes(tickangle=-45)
 st.plotly_chart(styled(fig, height=460), use_container_width=True)
-
-# ------------------------------------------------------------------
-# COMEBACK VS FIRST ENTRY
-# ------------------------------------------------------------------
 
 section("Comeback vs First Entry")
 
@@ -371,10 +336,6 @@ else:
         labels={"first_entry_position": "First Entry Position (rank)", "reentry_position": "Re-entry Position (rank)"},
     )
     st.plotly_chart(styled(fig), use_container_width=True)
-
-# ------------------------------------------------------------------
-# CONTENT ATTRIBUTES
-# ------------------------------------------------------------------
 
 section("Content Attribute vs Momentum")
 
@@ -408,10 +369,6 @@ fig = px.scatter(
     hover_data=["song"], size="recovery_speed_score",
 )
 st.plotly_chart(styled(fig), use_container_width=True)
-
-# ------------------------------------------------------------------
-# LEADERBOARD
-# ------------------------------------------------------------------
 
 section("Fandom Intensity Leaderboard")
 
