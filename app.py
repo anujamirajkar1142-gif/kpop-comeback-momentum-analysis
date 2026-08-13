@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 st.set_page_config(
-    page_title="Atlantic Recording Corporation — South Korea Analytics",
+    page_title="KPop-Comeback-Momentum-Analysis",
     page_icon="◈",
     layout="wide"
 )
@@ -210,7 +210,7 @@ def divider():
 
 
 
-# UPDATED: Added "data/" to the start of all file paths
+
 chart_history = pd.read_csv("data/chart_history.csv", parse_dates=["date"])
 reentry_events = pd.read_csv("data/reentry_events.csv", parse_dates=["reentry_date", "exit_date"])
 momentum = pd.read_csv(
@@ -225,8 +225,8 @@ st.markdown(
     """
     <div class="plate-header">
         <p class="plate-eyebrow">Atlantic Recording Corporation · South Korea Top 50</p>
-        <p class="plate-title">Comeback &amp; Fandom Intelligence</p>
-        <p class="plate-subtitle">Chart re-entry detection, momentum spikes, and fandom-intensity signal — built on daily playlist telemetry.</p>
+        <p class="plate-title">K-Pop Comeback Momentum Analysis</p>
+        <p class="plate-subtitle">Chart re-entry detection, momentum spikes, and fandom-intensity signal-built on daily playlist telemetry.</p>
     </div>
     """,
     unsafe_allow_html=True
